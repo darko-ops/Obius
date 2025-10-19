@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validator Dashboard - Obius</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #16181C;
+            --bg-tertiary: #1E2124;
+            --bg-hover: #1C1F23;
+            --text-primary: #E7E9EA;
+            --text-secondary: #71767B;
+            --text-tertiary: #565B60;
+            --border-primary: #2F3336;
+            --border-secondary: #3E4145;
+            --accent: #1D9BF0;
+            --accent-hover: #1A8CD8;
+            --success: #00BA7C;
+            --error: #F4212E;
+            --warning: #FFB700;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-primary);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 3px;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .nav-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 1rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            position: relative;
+            margin: 0.25rem 0.5rem;
+            border-radius: 24px;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-hover);
+        }
+
+        .nav-link.active {
+            font-weight: 600;
+            background: var(--bg-secondary);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60%;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            width: 48px;
+            height: 48px;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .stats-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .stat-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .main-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-primary);
+            padding: 0 1.5rem;
+            background: var(--bg-secondary);
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-content {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .task-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .task-card:hover {
+            border-color: var(--border-secondary);
+            background: var(--bg-tertiary);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .task-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .task-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .reward-badge {
+            padding: 0.5rem 1rem;
+            background: rgba(0, 186, 124, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--success);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.pass {
+            background: rgba(0, 186, 124, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-badge.fail {
+            background: rgba(244, 33, 46, 0.1);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        .status-badge.pending {
+            background: rgba(255, 183, 0, 0.1);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border: 1px solid var(--border-secondary);
+            background: var(--accent);
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent-hover);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--border-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .status-message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+
+        .status-success {
+            background: rgba(0, 186, 124, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .status-error {
+            background: rgba(244, 33, 46, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 2rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-select, .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .form-select:focus, .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-tertiary);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-info {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-primary);
+        }
+
+        .form-info div {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-info strong {
+            color: var(--text-primary);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .range-display {
+            text-align: center;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg-tertiary);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+        }
+
+        .history-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .history-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .history-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .history-content {
+            background: var(--bg-secondary);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .history-footer {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <a href="/" class="logo">
+                <span>⚡</span>
+                <span>Obius</span>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Core</div>
+            <a href="/catalog.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">📊</span>
+                <span>Exchange</span>
+            </a>
+            <a href="/warp.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">🔄</span>
+                <span>Warp</span>
+            </a>
+            <a href="/validator.html" class="nav-link active">
+                <span style="margin-right: 0.75rem;">✓</span>
+                <span>Validator</span>
+            </a>
+            <a href="/network.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">🌐</span>
+                <span>Network</span>
+            </a>
+            <a href="/protocol.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">💎</span>
+                <span>Protocol</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Account</div>
+            <a href="/profile.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">👤</span>
+                <span>Profile</span>
+            </a>
+            <a href="/upload.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">⬆️</span>
+                <span>Upload Data</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Validator Dashboard</h1>
+                <p class="page-subtitle">Review data packages and earn rewards through consensus validation</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="stats-panel">
+                    <h3 class="stats-title">Your Stats</h3>
+                    <div class="stat-item">
+                        <div class="stat-label">Total Validations</div>
+                        <div class="stat-value" id="total-validations">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Consensus Rate</div>
+                        <div class="stat-value" id="consensus-rate">0%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Total Earned</div>
+                        <div class="stat-value" id="total-earned" style="color: var(--success);">$0.00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Current Balance</div>
+                        <div class="stat-value" id="current-balance" style="color: var(--success);">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="main-panel">
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('tasks')">Available Tasks</button>
+                        <button class="tab" onclick="switchTab('history')">My History</button>
+                    </div>
+
+                    <div class="tab-content active" id="tasks-tab">
+                        <div id="tasks-container">
+                            <div class="loading">Loading validation tasks...</div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="history-tab">
+                        <div id="history-container">
+                            <div class="loading">Loading history...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validation Modal -->
+    <div id="validation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Submit Validation</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="validation-form">
+                <input type="hidden" id="task-id">
+                
+                <div class="form-info">
+                    <div>Package: <strong id="modal-package-name"></strong></div>
+                    <div>Type: <strong id="modal-validation-type"></strong></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Result</label>
+                    <select id="validation-result" class="form-select" required>
+                        <option value="">Select result</option>
+                        <option value="pass">✓ Pass</option>
+                        <option value="fail">✗ Fail</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confidence (0-100%)</label>
+                    <input type="range" id="confidence-score" min="0" max="100" value="80">
+                    <div class="range-display" id="confidence-display">80%</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea id="validation-notes" class="form-textarea" required placeholder="Describe your validation findings..."></textarea>
+                </div>
+
+                <div id="modal-status"></div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn" id="submit-btn">Submit Validation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8100';
+        let currentUser = null;
+        let mySubmissions = [];
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('show');
+            }
+        }
+
+        function getCurrentUser() {
+            const userData = localStorage.getItem('obius_user');
+            if (userData) {
+                try {
+                    return JSON.parse(userData);
+                } catch (e) {
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            if (tabName === 'history') {
+                loadValidationHistory();
+            }
+        }
+
+        async function loadValidatorStats() {
+            try {
+                const response = await fetch(`${API_BASE}/validators/me`, {
+                    headers: { 'X-API-Key': currentUser.api_key }
+                });
+
+                if (response.ok) {
+                    const stats = await response.json();
+                    document.getElementById('total-validations').textContent = stats.stats?.total_validations || 0;
+                    document.getElementById('consensus-rate').textContent = `${((stats.stats?.consensus_rate || 0) * 100).toFixed(0)}%`;
+                    document.getElementById('total-earned').textContent = `$${(stats.stats?.total_earned || 0).toFixed(2)}`;
+                    document.getElementById('current-balance').textContent = `$${(stats.balance || 0).toFixed(2)}`;
+                }
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        async function loadAvailableTasks() {
+            const container = document.getElementById('tasks-container');
+            
+            try {
+                const response = await fetch(`${API_BASE}/validation-tasks`, {
+                    headers: { 'X-API-Key': currentUser.api_key }
+                });
+
+                if (response.ok) {
+                    const tasks = await response.json();
+                    const submittedTaskIds = mySubmissions.map(s => s.task_id);
+                    const availableTasks = tasks.filter(task => !submittedTaskIds.includes(task.task_id));
+                    displayTasks(availableTasks);
+                } else {
+                    container.innerHTML = '<div class="empty-state"><h3>Failed to load tasks</h3></div>';
+                }
+            } catch (error) {
+                container.innerHTML = '<div class="empty-state"><h3>Connection error</h3></div>';
+            }
+        }
+
+        function displayTasks(tasks) {
+            const container = document.getElementById('tasks-container');
+
+            if (tasks.length === 0) {
+                container.innerHTML = '<div class="empty-state"><h3>No tasks available</h3><p>Check back later or you\'ve completed all available tasks!</p></div>';
+                return;
+            }
+
+            container.innerHTML = tasks.map(task => `
+                <div class="task-card">
+                    <div class="task-header">
+                        <div>
+                            <div class="task-title">${task.package_name}</div>
+                            <div class="task-meta">${task.validation_type.replace(/_/g, ' ')} • ${task.spots_remaining} spot(s) remaining</div>
+                        </div>
+                        <div class="reward-badge">+$${task.reward_pool.toFixed(3)}</div>
+                    </div>
+                    <button class="btn" onclick="startValidation(${task.task_id}, '${task.package_name}', '${task.validation_type}')">
+                        Start Validation
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function loadValidationHistory() {
+            const container = document.getElementById('history-container');
+            container.innerHTML = '<div class="loading">Loading history...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/validators/me/history`, {
+                    headers: { 'X-API-Key': currentUser.api_key }
+                });
+
+                if (response.ok) {
+                    const history = await response.json();
+                    
+                    if (history.length === 0) {
+                        container.innerHTML = '<div class="empty-state"><h3>No validation history yet</h3><p>Complete validation tasks to see your history here</p></div>';
+                        return;
+                    }
+
+                    mySubmissions = history;
+                    
+                    container.innerHTML = history.map(sub => `
+                        <div class="history-item">
+                            <div class="history-header">
+                                <div>
+                                    <div class="history-title">${sub.package_name}</div>
+                                    <div class="history-meta">${sub.validation_type.replace(/_/g, ' ')} • ${sub.category}</div>
+                                </div>
+                                <span class="status-badge ${sub.passed ? 'pass' : 'fail'}">
+                                    ${sub.passed ? '✓ Passed' : '✗ Failed'}
+                                </span>
+                            </div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                                Confidence: ${(sub.confidence_score * 100).toFixed(0)}% • Earned: $${sub.payout_earned.toFixed(3)}
+                            </div>
+                            <div class="history-content">
+                                ${sub.notes}
+                            </div>
+                            <div class="history-footer">
+                                Submitted: ${new Date(sub.submitted_at).toLocaleString()}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<div class="empty-state"><h3>Failed to load history</h3></div>';
+                }
+            } catch (error) {
+                console.error('Failed to load history:', error);
+                container.innerHTML = '<div class="empty-state"><h3>Error loading history</h3></div>';
+            }
+        }
+
+        function startValidation(taskId, packageName, validationType) {
+            document.getElementById('validation-form').reset();
+            document.getElementById('modal-status').innerHTML = '';
+            
+            document.getElementById('task-id').value = taskId;
+            document.getElementById('modal-package-name').textContent = packageName;
+            document.getElementById('modal-validation-type').textContent = validationType.replace(/_/g, ' ');
+            
+            document.getElementById('confidence-score').value = 80;
+            document.getElementById('confidence-display').textContent = '80%';
+            
+            document.getElementById('validation-modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('validation-modal').classList.remove('show');
+            document.getElementById('validation-form').reset();
+            document.getElementById('modal-status').innerHTML = '';
+            document.getElementById('task-id').value = '';
+        }
+
+        document.getElementById('confidence-score').addEventListener('input', (e) => {
+            document.getElementById('confidence-display').textContent = e.target.value + '%';
+        });
+
+        document.getElementById('validation-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const taskId = parseInt(document.getElementById('task-id').value);
+
+            if (!taskId) {
+                document.getElementById('modal-status').innerHTML = 
+                    '<div class="status-message status-error">Error: No task ID found. Please close and try again.</div>';
+                return;
+            }
+
+            const payload = {
+                passed: document.getElementById('validation-result').value === 'pass',
+                confidence_score: parseFloat(document.getElementById('confidence-score').value) / 100,
+                notes: document.getElementById('validation-notes').value,
+                validation_data: {}
+            };
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                const response = await fetch(`${API_BASE}/validation-tasks/${taskId}/submit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': currentUser.api_key
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    try {
+                        const historyResponse = await fetch(`${API_BASE}/validators/me/history`, {
+                            headers: { 'X-API-Key': currentUser.api_key }
+                        });
+                        if (historyResponse.ok) {
+                            mySubmissions = await historyResponse.json();
+                        }
+                    } catch (e) {
+                        console.error('Failed to reload history:', e);
+                    }
+
+                    document.getElementById('modal-status').innerHTML = 
+                        '<div class="status-message status-success">✓ Validation submitted successfully!</div>';
+                    
+                    setTimeout(() => {
+                        closeModal();
+                        loadAvailableTasks();
+                        loadValidatorStats();
+                    }, 2000);
+                } else {
+                    document.getElementById('modal-status').innerHTML = 
+                        `<div class="status-message status-error">Error: ${data.detail || 'Submission failed'}</div>`;
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                document.getElementById('modal-status').innerHTML = 
+                    '<div class="status-message status-error">Network error. Please try again.</div>';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Validation';
+            }
+        });
+
+        async function init() {
+            currentUser = getCurrentUser();
+            
+            if (!currentUser) {
+                window.location.href = '/auth.html';
+                return;
+            }
+
+            if (!currentUser.roles.includes('validator')) {
+                alert('Validator role required');
+                window.location.href = '/profile.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/validators/me/history`, {
+                    headers: { 'X-API-Key': currentUser.api_key }
+                });
+                if (response.ok) {
+                    mySubmissions = await response.json();
+                }
+            } catch (error) {
+                console.error('Failed to preload history:', error);
+            }
+
+            await loadValidatorStats();
+            await loadAvailableTasks();
+        }
+
+        init();
+    </script>
+</body>
+</html>

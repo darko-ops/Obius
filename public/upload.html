@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Data Package - Obius</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #16181C;
+            --bg-tertiary: #1E2124;
+            --bg-hover: #1C1F23;
+            --text-primary: #E7E9EA;
+            --text-secondary: #71767B;
+            --text-tertiary: #565B60;
+            --border-primary: #2F3336;
+            --border-secondary: #3E4145;
+            --accent: #1D9BF0;
+            --accent-hover: #1A8CD8;
+            --success: #00BA7C;
+            --error: #F4212E;
+            --warning: #FFB700;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-primary);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 3px;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .nav-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 1rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            position: relative;
+            margin: 0.25rem 0.5rem;
+            border-radius: 24px;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-hover);
+        }
+
+        .nav-link.active {
+            font-weight: 600;
+            background: var(--bg-secondary);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60%;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            width: 48px;
+            height: 48px;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .upload-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .upload-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .upload-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .upload-form {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-tertiary);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-help {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            background: var(--bg-primary);
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent);
+            background: var(--bg-tertiary);
+        }
+
+        .file-upload.dragover {
+            border-color: var(--accent);
+            background: rgba(29, 155, 240, 0.1);
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-text {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .file-upload-hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-list {
+            margin-top: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .file-details h4 {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .file-details p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .file-action {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            border: 1px solid var(--border-secondary);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .file-action:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .file-action.danger:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .status-message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+        }
+
+        .status-success {
+            background: rgba(0, 186, 124, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .status-error {
+            background: rgba(244, 33, 46, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .status-warning {
+            background: rgba(255, 183, 0, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        .upload-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-primary);
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border: 1px solid var(--border-secondary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--bg-hover);
+        }
+
+        .btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .btn.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .upload-container {
+                padding: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-actions {
+                flex-direction: column;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <a href="/" class="logo">
+                <span>⚡</span>
+                <span>Obius</span>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Core</div>
+            <a href="/catalog.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">📊</span>
+                <span>Exchange</span>
+            </a>
+            <a href="/warp.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">🔄</span>
+                <span>Warp</span>
+            </a>
+            <a href="/validator.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">✓</span>
+                <span>Validator</span>
+            </a>
+            <a href="/network.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">🌐</span>
+                <span>Network</span>
+            </a>
+            <a href="/protocol.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">💎</span>
+                <span>Protocol</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Account</div>
+            <a href="/profile.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">👤</span>
+                <span>Profile</span>
+            </a>
+            <a href="/upload.html" class="nav-link active">
+                <span style="margin-right: 0.75rem;">⬆️</span>
+                <span>Upload Data</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="upload-container">
+            <div class="upload-header">
+                <h1 class="upload-title">Upload Data Package</h1>
+                <p class="upload-subtitle">Share your dataset with the Obius marketplace</p>
+            </div>
+
+            <div class="upload-form">
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Dataset Name *</label>
+                        <input type="text" id="name" class="form-input" required placeholder="e.g., Crypto Market Data">
+                        <div class="form-help">Choose a descriptive name for your dataset</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="description">Description</label>
+                        <textarea id="description" class="form-textarea" placeholder="Describe what your dataset contains..."></textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="category">Category *</label>
+                            <select id="category" class="form-select" required>
+                                <option value="">Select category</option>
+                                <option value="financial">Financial</option>
+                                <option value="weather">Weather</option>
+                                <option value="social">Social</option>
+                                <option value="news">News</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="price">Price per Query ($)</label>
+                            <input type="number" id="price" class="form-input" step="0.001" min="0" value="0.005">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="tags">Tags (comma-separated)</label>
+                        <input type="text" id="tags" class="form-input" placeholder="crypto, prices, real-time">
+                        <div class="form-help">Add tags to help users find your dataset</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Upload CSV File *</label>
+                        <div class="file-upload" onclick="document.getElementById('file-input').click()">
+                            <div class="file-upload-icon">📁</div>
+                            <div class="file-upload-text">Click to select file or drag and drop</div>
+                            <div class="file-upload-hint">CSV files only, max 10MB</div>
+                            <input type="file" id="file-input" class="file-input" accept=".csv" required>
+                        </div>
+
+                        <div class="file-list" id="file-list"></div>
+
+                        <div class="progress-bar" id="upload-progress" style="display: none;">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text" style="display: none;"></div>
+                    </div>
+
+                    <div id="upload-status"></div>
+                </form>
+            </div>
+
+            <div class="upload-actions">
+                <a href="/catalog.html" class="btn">Cancel</a>
+                <button type="submit" class="btn primary" id="upload-btn" form="upload-form">
+                    <span id="upload-btn-text">Upload Dataset</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8100';
+        let currentUser = null;
+        let selectedFile = null;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('show');
+            }
+        }
+
+        function getCurrentUser() {
+            const sessionToken = localStorage.getItem('obius_session');
+            const userData = localStorage.getItem('obius_user');
+            
+            if (sessionToken && userData) {
+                try {
+                    return JSON.parse(userData);
+                } catch (e) {
+                    localStorage.removeItem('obius_session');
+                    localStorage.removeItem('obius_user');
+                }
+            }
+            return null;
+        }
+
+        function checkAuthStatus() {
+            currentUser = getCurrentUser();
+            
+            if (!currentUser) {
+                window.location.href = '/auth.html';
+                return;
+            }
+
+            if (!currentUser.roles.includes('supplier')) {
+                showError('Upload feature is only available for suppliers. Please register as a supplier first.');
+                setTimeout(() => {
+                    window.location.href = '/profile.html';
+                }, 3000);
+                return;
+            }
+        }
+
+        function showError(message) {
+            const statusDiv = document.getElementById('upload-status');
+            statusDiv.innerHTML = `<div class="status-message status-error"><strong>Error:</strong><br>${message}</div>`;
+        }
+
+        function showSuccess(message) {
+            const statusDiv = document.getElementById('upload-status');
+            statusDiv.innerHTML = `<div class="status-message status-success"><strong>Success:</strong><br>${message}</div>`;
+        }
+
+        function showWarning(message) {
+            const statusDiv = document.getElementById('upload-status');
+            statusDiv.innerHTML = `<div class="status-message status-warning"><strong>Warning:</strong><br>${message}</div>`;
+        }
+
+        // File upload handlers
+        document.getElementById('file-input').addEventListener('change', handleFileSelect);
+        
+        const fileUpload = document.querySelector('.file-upload');
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+        
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+        
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            handleFileSelect({ target: { files: e.dataTransfer.files } });
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                showError('Please select a CSV file.');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showError('File too large. Maximum size is 10MB.');
+                return;
+            }
+
+            selectedFile = file;
+            renderFileList();
+        }
+
+        function renderFileList() {
+            const fileList = document.getElementById('file-list');
+            
+            if (selectedFile) {
+                fileList.innerHTML = `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">CSV</div>
+                            <div class="file-details">
+                                <h4>${selectedFile.name}</h4>
+                                <p>${formatFileSize(selectedFile.size)}</p>
+                            </div>
+                        </div>
+                        <div class="file-actions">
+                            <button type="button" class="file-action danger" onclick="removeFile()">Remove</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                fileList.innerHTML = '';
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function removeFile() {
+            selectedFile = null;
+            document.getElementById('file-input').value = '';
+            renderFileList();
+        }
+
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser || !currentUser.api_key) {
+                showError('Please sign in to upload datasets.');
+                return;
+            }
+
+            if (!currentUser.roles.includes('supplier')) {
+                showError('Upload feature is only available for suppliers.');
+                return;
+            }
+
+            if (!selectedFile) {
+                showError('Please select a CSV file to upload.');
+                return;
+            }
+
+            const uploadBtn = document.getElementById('upload-btn');
+            const uploadBtnText = document.getElementById('upload-btn-text');
+            const progressBar = document.getElementById('upload-progress');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            uploadBtn.disabled = true;
+            uploadBtnText.innerHTML = '<span class="spinner"></span>Uploading...';
+            progressBar.style.display = 'block';
+            progressText.style.display = 'block';
+            progressText.textContent = 'Preparing upload...';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('name', document.getElementById('name').value);
+                formData.append('description', document.getElementById('description').value || '');
+                formData.append('category', document.getElementById('category').value);
+                formData.append('price_per_query', document.getElementById('price').value);
+                formData.append('tags', document.getElementById('tags').value || '');
+
+                progressText.textContent = 'Uploading file...';
+                progressFill.style.width = '30%';
+
+                const response = await fetch(`${API_BASE}/users/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'X-API-Key': currentUser.api_key
+                    },
+                    body: formData
+                });
+
+                progressFill.style.width = '70%';
+                progressText.textContent = 'Processing upload...';
+
+                let result;
+                try {
+                    result = await response.json();
+                } catch (jsonError) {
+                    showError('Server returned invalid response format.');
+                    return;
+                }
+
+                if (response.ok) {
+                    progressFill.style.width = '100%';
+                    progressText.textContent = 'Upload complete!';
+                    
+                    let successMsg = `Dataset "${result.package_name || document.getElementById('name').value}" uploaded successfully! Package ID: ${result.package_id}`;
+                    
+                    if (result.pii_analysis) {
+                        const piiInfo = result.pii_analysis;
+                        if (piiInfo.data_cleaned) {
+                            successMsg += `\n\nPII detected and cleaned: ${piiInfo.actions_taken.join(', ')}`;
+                        }
+                    }
+                    
+                    showSuccess(successMsg);
+
+                    setTimeout(() => {
+                        document.getElementById('upload-form').reset();
+                        removeFile();
+                        document.getElementById('upload-status').innerHTML = '';
+                        progressBar.style.display = 'none';
+                        progressText.style.display = 'none';
+                    }, 3000);
+                    
+                } else {
+                    if (result.error === 'PII_DETECTED') {
+                        showError(`Upload blocked due to PII detection: ${Object.keys(result.pii_found).join(', ')}. ${result.recommendation}`);
+                    } else {
+                        showError(result.detail || result.message || `Upload failed with status ${response.status}`);
+                    }
+                }
+
+            } catch (error) {
+                showError(`Network error during upload: ${error.message}`);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtnText.textContent = 'Upload Dataset';
+                if (!document.querySelector('.status-success')) {
+                    progressBar.style.display = 'none';
+                    progressText.style.display = 'none';
+                }
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        checkAuthStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv Dockerfile Dockerfile.collector docker-compose.yml docker/)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

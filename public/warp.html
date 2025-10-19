@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warp - Obius</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #16181C;
+            --bg-tertiary: #1E2124;
+            --bg-hover: #1C1F23;
+            --text-primary: #E7E9EA;
+            --text-secondary: #71767B;
+            --text-tertiary: #565B60;
+            --border-primary: #2F3336;
+            --border-secondary: #3E4145;
+            --accent: #1D9BF0;
+            --accent-hover: #1A8CD8;
+            --success: #00BA7C;
+            --error: #F4212E;
+            --warning: #FFB700;
+            --purple: #7856FF;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-primary);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 3px;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .nav-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 1rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            position: relative;
+            margin: 0.25rem 0.5rem;
+            border-radius: 24px;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-hover);
+        }
+
+        .nav-link.active {
+            font-weight: 600;
+            background: var(--bg-secondary);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60%;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            width: 48px;
+            height: 48px;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 0;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .section-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .code-block pre {
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .code-highlight {
+            color: var(--accent);
+        }
+
+        .code-string {
+            color: var(--success);
+        }
+
+        .code-number {
+            color: var(--warning);
+        }
+
+        .code-key {
+            color: var(--purple);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-primary);
+            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .schema-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .schema-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .schema-item:hover {
+            border-color: var(--border-secondary);
+            background: var(--bg-tertiary);
+        }
+
+        .schema-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .schema-version {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(29, 155, 240, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .schema-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .schema-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .field-tag {
+            padding: 0.35rem 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .field-tag.required {
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .pipeline-steps {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .pipeline-step {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-left: 4px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <a href="/" class="logo">
+                <span>⚡</span>
+                <span>Obius</span>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Core</div>
+            <a href="/catalog.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">📊</span>
+                <span>Exchange</span>
+            </a>
+            <a href="/warp.html" class="nav-link active">
+                <span style="margin-right: 0.75rem;">🔄</span>
+                <span>Warp</span>
+            </a>
+            <a href="/validator.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">✓</span>
+                <span>Validator</span>
+            </a>
+            <a href="/network.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">🌐</span>
+                <span>Network</span>
+            </a>
+            <a href="/protocol.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">💎</span>
+                <span>Protocol</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Account</div>
+            <a href="/profile.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">👤</span>
+                <span>Profile</span>
+            </a>
+            <a href="/upload.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">⬆️</span>
+                <span>Upload Data</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Warp</h1>
+                <p class="page-subtitle">Transform any data source into validated, canonical records with deterministic schema standardization</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">v0.1.0</div>
+                    <div class="stat-label">WarpSpec Version</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Validation Layers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Schema Coverage</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">ISO</div>
+                    <div class="stat-label">Standard Compliant</div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3 class="feature-title">Universal Envelope</h3>
+                    <p class="feature-description">Every record shares the same top-level structure, separating provenance, extraction, mapping, validation, and payload.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✓</div>
+                    <h3 class="feature-title">Deterministic Validation</h3>
+                    <p class="feature-description">JSON Schema 2020-12 plus rule engine for semantic checks ensures data quality and consistency.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3 class="feature-title">Content-Addressed</h3>
+                    <p class="feature-description">SHA-256 hashes, HTTP metadata, snapshots, and transformation lineage for complete auditability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3 class="feature-title">Normalized Standards</h3>
+                    <p class="feature-description">ISO-8601 timestamps, ISO-4217 currency, SI units, and ISO-3166 country codes throughout.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Versioned Schemas</h3>
+                    <p class="feature-description">Independent versioning for envelope and domain payloads with semantic versioning.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3 class="feature-title">Human Readable</h3>
+                    <p class="feature-description">Snake_case keys, lightweight nesting, canonical field order, and clear examples.</p>
+                </div>
+            </div>
+
+            <!-- Pipeline -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Warp Pipeline</h2>
+                </div>
+                <div class="section-content">
+                    <div class="pipeline-steps">
+                        <div class="pipeline-step">
+                            <span class="step-number">1</span>
+                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
+                                <div class="step-title">Capture</div>
+                                <div class="step-description">Fetch data, store snapshot blob, compute content hash (SHA-256)</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-number">2</span>
+                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
+                                <div class="step-title">Extract</div>
+                                <div class="step-description">Apply rules/CSS/XPath/LLM hybrid to produce loose dictionary</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-number">3</span>
+                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
+                                <div class="step-title">Normalize</div>
+                                <div class="step-description">Convert currency, units, locale, whitespace, and number coercions</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-number">4</span>
+                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
+                                <div class="step-title">Map</div>
+                                <div class="step-description">Assign domain schema and perform field mapping transformations</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-number">5</span>
+                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
+                                <div class="step-title">Validate</div>
+                                <div class="step-description">JSON Schema + semantic rule engine validation with detailed results</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-number">6</span>
+                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
+                                <div class="step-title">Dedupe</div>
+                                <div class="step-description">Fingerprinting and clustering across envelope + payload data</div>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-number">7</span>
+                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
+                                <div class="step-title">Persist</div>
+                                <div class="step-description">Write to object store and index metadata to database</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schemas -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Domain Schemas</h2>
+                </div>
+                <div class="section-content">
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('product')">Product</button>
+                        <button class="tab" onclick="switchTab('job')">Job Posting</button>
+                        <button class="tab" onclick="switchTab('article')">Article</button>
+                    </div>
+
+                    <div class="tab-content active" id="product-tab">
+                        <div class="schema-item">
+                            <div class="schema-name">
+                                schema/product
+                                <span class="schema-version">@1.1.0</span>
+                            </div>
+                            <div class="schema-description">E-commerce product listings with pricing, availability, and specifications</div>
+                            <div class="schema-fields">
+                                <span class="field-tag required">name*</span>
+                                <span class="field-tag">sku</span>
+                                <span class="field-tag">brand</span>
+                                <span class="field-tag">price</span>
+                                <span class="field-tag">availability</span>
+                                <span class="field-tag">dimensions</span>
+                                <span class="field-tag">images</span>
+                                <span class="field-tag">specs</span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre>{
+  <span class="code-key">"name"</span>: <span class="code-string">"Solar Panel Kit 300W"</span>,
+  <span class="code-key">"sku"</span>: <span class="code-string">"SPK-300"</span>,
+  <span class="code-key">"brand"</span>: <span class="code-string">"Helio"</span>,
+  <span class="code-key">"price"</span>: {
+    <span class="code-key">"amount"</span>: <span class="code-number">249.99</span>,
+    <span class="code-key">"currency"</span>: <span class="code-string">"USD"</span>
+  },
+  <span class="code-key">"availability"</span>: <span class="code-string">"in_stock"</span>,
+  <span class="code-key">"images"</span>: [<span class="code-string">"https://cdn.example.com/solar.jpg"</span>],
+  <span class="code-key">"specs"</span>: {
+    <span class="code-key">"cells"</span>: <span class="code-string">"Monocrystalline"</span>,
+    <span class="code-key">"efficiency"</span>: <span class="code-number">0.21</span>
+  }
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="job-tab">
+                        <div class="schema-item">
+                            <div class="schema-name">
+                                schema/job
+                                <span class="schema-version">@1.0.0</span>
+                            </div>
+                            <div class="schema-description">Job postings with location, salary range, and requirements</div>
+                            <div class="schema-fields">
+                                <span class="field-tag required">title*</span>
+                                <span class="field-tag required">company*</span>
+                                <span class="field-tag">location_text</span>
+                                <span class="field-tag">remote</span>
+                                <span class="field-tag">salary_range</span>
+                                <span class="field-tag">posted_at</span>
+                                <span class="field-tag">description</span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre>{
+  <span class="code-key">"title"</span>: <span class="code-string">"Data Engineer"</span>,
+  <span class="code-key">"company"</span>: <span class="code-string">"OpenAI"</span>,
+  <span class="code-key">"location_text"</span>: <span class="code-string">"Remote (US)"</span>,
+  <span class="code-key">"remote"</span>: <span class="code-highlight">true</span>,
+  <span class="code-key">"salary_range"</span>: {
+    <span class="code-key">"min"</span>: { <span class="code-key">"amount"</span>: <span class="code-number">150000</span>, <span class="code-key">"currency"</span>: <span class="code-string">"USD"</span> },
+    <span class="code-key">"max"</span>: { <span class="code-key">"amount"</span>: <span class="code-number">220000</span>, <span class="code-key">"currency"</span>: <span class="code-string">"USD"</span> }
+  },
+  <span class="code-key">"posted_at"</span>: <span class="code-string">"2025-10-18T00:00:00Z"</span>
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="article-tab">
+                        <div class="schema-item">
+                            <div class="schema-name">
+                                schema/article
+                                <span class="schema-version">@1.0.0</span>
+                            </div>
+                            <div class="schema-description">News articles and blog posts with authorship and content hashing</div>
+                            <div class="schema-fields">
+                                <span class="field-tag required">title*</span>
+                                <span class="field-tag">authors</span>
+                                <span class="field-tag">published_at</span>
+                                <span class="field-tag">summary</span>
+                                <span class="field-tag">body_text_hash</span>
+                            </div>
+                        </div>
+                        <div class="code-block">
+<pre>{
+  <span class="code-key">"title"</span>: <span class="code-string">"AI Research Breakthrough"</span>,
+  <span class="code-key">"authors"</span>: [<span class="code-string">"Dr. Jane Smith"</span>, <span class="code-string">"Prof. John Doe"</span>],
+  <span class="code-key">"published_at"</span>: <span class="code-string">"2025-10-18T10:30:00Z"</span>,
+  <span class="code-key">"summary"</span>: <span class="code-string">"Research team achieves new milestone..."</span>,
+  <span class="code-key">"body_text_hash"</span>: <span class="code-string">"sha256:abc123..."</span>
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Envelope -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Universal Envelope Structure</h2>
+                </div>
+                <div class="section-content">
+                    <div class="code-block">
+<pre>{
+  <span class="code-key">"warp_version"</span>: <span class="code-string">"0.1.0"</span>,
+  <span class="code-key">"id"</span>: <span class="code-string">"urn:uuid:2a5c9a2e-2e8c-4a41-9b9a-2d3d5f9e43ab"</span>,
+  <span class="code-key">"source"</span>: {
+    <span class="code-key">"url"</span>: <span class="code-string">"https://example.com/data"</span>,
+    <span class="code-key">"domain"</span>: <span class="code-string">"example.com"</span>,
+    <span class="code-key">"fetched_at"</span>: <span class="code-string">"2025-10-18T14:03:11Z"</span>,
+    <span class="code-key">"content"</span>: {
+      <span class="code-key">"hash"</span>: <span class="code-string">"sha256:abc..."</span>,
+      <span class="code-key">"bytes"</span>: <span class="code-number">48211</span>
+    }
+  },
+  <span class="code-key">"extraction"</span>: {
+    <span class="code-key">"strategy"</span>: <span class="code-string">"hybrid"</span>,
+    <span class="code-key">"spec_id"</span>: <span class="code-string">"supplier/acme@3.0.0"</span>
+  },
+  <span class="code-key">"mapping"</span>: {
+    <span class="code-key">"schema_id"</span>: <span class="code-string">"schema/product@1.1.0"</span>,
+    <span class="code-key">"currency_policy"</span>: <span class="code-string">"ISO-4217"</span>
+  },
+  <span class="code-key">"validation"</span>: {
+    <span class="code-key">"summary"</span>: { <span class="code-key">"errors"</span>: <span class="code-number">0</span>, <span class="code-key">"warnings"</span>: <span class="code-number">1</span> }
+  },
+  <span class="code-key">"payload"</span>: {
+    <span class="code-key">"schema_id"</span>: <span class="code-string">"schema/product@1.1.0"</span>,
+    <span class="code-key">"data"</span>: { <span class="code-highlight">/* domain-specific fields */</span> }
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div style="text-align: center; margin: 3rem 0;">
+                <a href="/catalog.html" class="btn">Browse Data Packages</a>
+                <a href="/upload.html" class="btn btn-secondary" style="margin-left: 1rem;">Upload Data</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('show');
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

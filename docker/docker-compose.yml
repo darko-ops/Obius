@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: obius-postgres
+    environment:
+      POSTGRES_USER: obius
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: obius
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U obius"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - obius-network
+
+  collector-crypto:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.collector
+    container_name: obius-collector-crypto
+    environment:
+      SEED: ${COLLECTOR_SEED:-42}
+    ports:
+      - "8200:8200"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/price"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - obius-network
+
+  obius-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: obius-api
+    environment:
+      # Security
+      OBIUS_SECRET: ${OBIUS_SECRET:?OBIUS_SECRET must be set}
+      
+      # Database
+      DATABASE_URL: postgresql://obius:${DB_PASSWORD:-password}@postgres:5432/obius
+      
+      # Stellar
+      STELLAR_SECRET_KEY: ${STELLAR_SECRET_KEY:?STELLAR_SECRET_KEY must be set}
+      STELLAR_NETWORK: ${STELLAR_NETWORK:-testnet}
+      USDC_ASSET_CODE: ${USDC_ASSET_CODE:-USDC}
+      USDC_ASSET_ISSUER: ${USDC_ASSET_ISSUER:-GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5}
+      
+      # Services
+      COLLECTOR_CRYPTO_URL: http://collector-crypto:8200
+      
+      # Pricing
+      PRICE_PER_QUERY_USD: ${PRICE_PER_QUERY_USD:-0.005}
+      SUPPLIER_SPLIT: ${SUPPLIER_SPLIT:-0.7}
+      REVIEWER_SPLIT: ${REVIEWER_SPLIT:-0.2}
+      OBIUS_SPLIT: ${OBIUS_SPLIT:-0.1}
+    ports:
+      - "8100:8100"
+    volumes:
+      - ../src/app.py:/app/app.py
+      - ../public:/app/public
+      - ../uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      collector-crypto:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - obius-network
+
+  # Optional: Redis for caching (future enhancement)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: obius-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   restart: unless-stopped
+  #   networks:
+  #     - obius-network
+
+volumes:
+  postgres_data:
+    driver: local
+  # redis_data:
+  #   driver: local
+
+networks:
+  obius-network:
+    driver: bridge

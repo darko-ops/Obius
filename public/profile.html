@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Obius</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #16181C;
+            --bg-tertiary: #1E2124;
+            --bg-hover: #1C1F23;
+            --text-primary: #E7E9EA;
+            --text-secondary: #71767B;
+            --text-tertiary: #565B60;
+            --border-primary: #2F3336;
+            --border-secondary: #3E4145;
+            --accent: #1D9BF0;
+            --accent-hover: #1A8CD8;
+            --success: #00BA7C;
+            --error: #F4212E;
+            --warning: #FFB700;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-primary);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 3px;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .nav-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 1rem 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            position: relative;
+            margin: 0.25rem 0.5rem;
+            border-radius: 24px;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-hover);
+        }
+
+        .nav-link.active {
+            font-weight: 600;
+            background: var(--bg-secondary);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 60%;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            width: 48px;
+            height: 48px;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .profile-header {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .profile-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .stat-item:hover {
+            border-color: var(--border-secondary);
+            background: var(--bg-tertiary);
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .section-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-action {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .section-action:hover {
+            background: var(--accent-hover);
+        }
+
+        .section-content {
+            padding: 1.5rem;
+        }
+
+        .account-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-group {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-primary);
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-value.monospace {
+            font-family: 'Monaco', 'Courier New', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-primary);
+            word-break: break-all;
+            color: var(--text-secondary);
+        }
+
+        .role-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .role-badge {
+            padding: 0.35rem 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-secondary);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-radius: 16px;
+            font-weight: 500;
+        }
+
+        .role-badge.supplier {
+            background: rgba(29, 155, 240, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .role-badge.reviewer,
+        .role-badge.validator {
+            background: rgba(0, 186, 124, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            margin-bottom: 1.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .data-table th {
+            background: var(--bg-primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .data-table td {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .data-table tr:hover {
+            background: var(--bg-hover);
+        }
+
+        .status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(0, 186, 124, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-pending {
+            background: rgba(255, 183, 0, 0.1);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border: 1px solid var(--border-secondary);
+            background: var(--accent);
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 24px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .account-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-secondary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <a href="/" class="logo">
+                <span>⚡</span>
+                <span>Obius</span>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Core</div>
+            <a href="/catalog.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">📊</span>
+                <span>Exchange</span>
+            </a>
+            <a href="/warp.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">🔄</span>
+                <span>Warp</span>
+            </a>
+            <a href="/validator.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">✓</span>
+                <span>Validator</span>
+            </a>
+            <a href="/network.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">🌐</span>
+                <span>Network</span>
+            </a>
+            <a href="/protocol.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">💎</span>
+                <span>Protocol</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Account</div>
+            <a href="/profile.html" class="nav-link active">
+                <span style="margin-right: 0.75rem;">👤</span>
+                <span>Profile</span>
+            </a>
+            <a href="/upload.html" class="nav-link">
+                <span style="margin-right: 0.75rem;">⬆️</span>
+                <span>Upload Data</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <h1 class="profile-title" id="profile-title">Loading...</h1>
+                <p class="profile-subtitle" id="profile-subtitle">Loading user information...</p>
+                
+                <div class="profile-stats" id="profile-stats">
+                    <!-- Stats populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="section-card" id="account-info-section">
+                <div class="section-header">
+                    <h2 class="section-title">Account Information</h2>
+                    <button class="section-action" onclick="editProfile()">Edit Profile</button>
+                </div>
+                <div class="section-content">
+                    <div class="account-info-grid" id="account-info-grid">
+                        <!-- Account info populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role-based Content Sections -->
+            <div id="role-based-sections">
+                <!-- Sections populated by JavaScript based on user roles -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8100';
+        let currentUser = null;
+        let userProfile = null;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('show');
+            }
+        }
+
+        function getCurrentUser() {
+            const sessionToken = localStorage.getItem('obius_session');
+            const userData = localStorage.getItem('obius_user');
+            
+            if (sessionToken && userData) {
+                try {
+                    return JSON.parse(userData);
+                } catch (e) {
+                    localStorage.removeItem('obius_session');
+                    localStorage.removeItem('obius_user');
+                }
+            }
+            return null;
+        }
+
+        function checkAuthStatus() {
+            currentUser = getCurrentUser();
+            
+            if (!currentUser) {
+                window.location.href = '/auth.html';
+                return;
+            }
+            
+            loadProfileData();
+        }
+
+        async function loadProfileData() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/users/me`, {
+                    headers: { 'X-API-Key': currentUser.api_key }
+                });
+
+                if (response.ok) {
+                    userProfile = await response.json();
+                    updateProfileHeader();
+                    updateAccountInfo();
+                    loadRoleBasedSections();
+                } else {
+                    updateProfileHeader();
+                    updateAccountInfo();
+                    loadRoleBasedSections();
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                updateProfileHeader();
+                updateAccountInfo();
+                loadRoleBasedSections();
+            }
+        }
+
+        function updateProfileHeader() {
+            const profile = userProfile || currentUser;
+            
+            document.getElementById('profile-title').textContent = `Welcome, ${profile.name}`;
+            document.getElementById('profile-subtitle').textContent = `${profile.type || 'User'} Account Dashboard`;
+
+            const statsContainer = document.getElementById('profile-stats');
+            const stats = [];
+
+            if (profile.type === 'supplier') {
+                stats.push(
+                    { label: 'Data Packages', value: profile.package_count || 0 },
+                    { label: 'Total Revenue', value: `$${(profile.total_earned || 0).toFixed(2)}` },
+                    { label: 'Current Balance', value: `$${(profile.balance || 0).toFixed(2)}` },
+                    { label: 'Account Status', value: profile.status || 'Active' }
+                );
+            } else if (profile.type === 'reviewer' || profile.roles?.includes('validator')) {
+                stats.push(
+                    { label: 'Reviews Completed', value: profile.stats?.total_reviews || 0 },
+                    { label: 'Consensus Rate', value: `${((profile.stats?.consensus_rate || 0) * 100).toFixed(0)}%` },
+                    { label: 'Total Earned', value: `$${(profile.stats?.total_earned || 0).toFixed(2)}` },
+                    { label: 'Reputation', value: profile.reputation_level || 'Novice' }
+                );
+            } else {
+                stats.push(
+                    { label: 'Account Type', value: profile.roles?.join(', ') || 'Buyer' },
+                    { label: 'API Key Type', value: profile.api_key?.substring(0, 4) || 'N/A' },
+                    { label: 'Member Since', value: new Date().getFullYear() },
+                    { label: 'Status', value: 'Active' }
+                );
+            }
+
+            statsContainer.innerHTML = stats.map(stat => `
+                <div class="stat-item">
+                    <div class="stat-value">${stat.value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateAccountInfo() {
+            const profile = userProfile || currentUser;
+            
+            const infoGrid = document.getElementById('account-info-grid');
+            infoGrid.innerHTML = `
+                <div class="info-group">
+                    <div class="info-label">Full Name</div>
+                    <div class="info-value">${profile.name}</div>
+                    <div class="info-label">Email Address</div>
+                    <div class="info-value">${profile.email}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Account Roles</div>
+                    <div class="role-badges">
+                        ${(profile.roles || ['buyer']).map(role => 
+                            `<span class="role-badge ${role}">${role}</span>`
+                        ).join('')}
+                    </div>
+                    <div class="info-label" style="margin-top: 1rem;">Member Since</div>
+                    <div class="info-value">${new Date().getFullYear()}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Stellar Address</div>
+                    <div class="info-value monospace">${profile.stellar_address}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">API Key</div>
+                    <div class="info-value monospace">${profile.api_key}</div>
+                    <button class="copy-btn" onclick="copyApiKey()">Copy API Key</button>
+                </div>
+            `;
+        }
+
+        async function loadRoleBasedSections() {
+            const sectionsContainer = document.getElementById('role-based-sections');
+            let sectionsHTML = '';
+
+            if (currentUser.roles.includes('supplier')) {
+                sectionsHTML += await generateSupplierSections();
+            }
+
+            if (currentUser.roles.includes('reviewer') || currentUser.roles.includes('validator')) {
+                sectionsHTML += await generateReviewerSections();
+            }
+
+            sectionsHTML += await generatePurchasesSection();
+
+            sectionsContainer.innerHTML = sectionsHTML;
+        }
+
+        async function generateSupplierSections() {
+            try {
+                const packagesResponse = await fetch(`${API_BASE}/packages`);
+                const allPackages = await packagesResponse.json();
+                const myPackages = allPackages.filter(pkg => pkg.supplier === currentUser.name);
+
+                return `
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2 class="section-title">My Data Packages</h2>
+                            <button class="section-action" onclick="uploadData()">Upload New Package</button>
+                        </div>
+                        <div class="section-content">
+                            ${myPackages.length === 0 ? `
+                                <div class="empty-state">
+                                    <h3>No packages yet</h3>
+                                    <p>Start by uploading your first data package</p>
+                                    <button class="btn" onclick="uploadData()">Upload Package</button>
+                                </div>
+                            ` : `
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Package Name</th>
+                                            <th>Category</th>
+                                            <th>Price per Query</th>
+                                            <th>Status</th>
+                                            <th>Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${myPackages.map(pkg => `
+                                            <tr>
+                                                <td>${pkg.name}</td>
+                                                <td>${pkg.category}</td>
+                                                <td>$${pkg.price_per_query}</td>
+                                                <td><span class="status-badge status-active">Active</span></td>
+                                                <td>${new Date().toLocaleDateString()}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            `}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                return `
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h2 class="section-title">My Data Packages</h2>
+                            <button class="section-action" onclick="uploadData()">Upload New Package</button>
+                        </div>
+                        <div class="section-content">
+                            <div class="loading">Loading packages...</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function generateReviewerSections() {
+            return `
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Validation Activity</h2>
+                        <a href="/validator.html" class="section-action">View Dashboard</a>
+                    </div>
+                    <div class="section-content">
+                        <div class="empty-state">
+                            <h3>Validator Dashboard</h3>
+                            <p>Visit the validator dashboard to see your activity and available tasks</p>
+                            <a href="/validator.html" class="btn">Go to Validator</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function generatePurchasesSection() {
+            return `
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Purchase History</h2>
+                        <button class="section-action" onclick="showPayoutHistory()">View All</button>
+                    </div>
+                    <div class="section-content">
+                        <div class="empty-state">
+                            <h3>No purchases yet</h3>
+                            <p>Your data package purchases will appear here</p>
+                            <a href="/catalog.html" class="btn">Browse Catalog</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function copyApiKey() {
+            if (currentUser) {
+                navigator.clipboard.writeText(currentUser.api_key).then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 2000);
+                });
+            }
+        }
+
+        function editProfile() {
+            alert('Profile editing feature coming soon!');
+        }
+
+        function uploadData() {
+            window.location.href = '/upload.html';
+        }
+
+        function showPayoutHistory() {
+            alert('Payout history interface coming soon!');
+        }
+
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+
+        checkAuthStatus();
+    </script>
+</body>
+</html>
