@@ -1230,6 +1230,30 @@ async def serve_auth():
     else:
         raise HTTPException(status_code=404, detail="Auth page not found")
 
+@api.get("/warp.html")
+async def serve_warp():
+    """Serve the warp page"""
+    return FileResponse("public/warp.html")
+
+@api.get("/network.html")
+async def serve_network():
+    """Serve the network page"""
+    network_path = "public/network.html"
+    if os.path.exists(network_path):
+        return FileResponse(network_path)
+    else:
+        raise HTTPException(status_code=404, detail="Network page not found")
+
+@api.get("/protocol.html")
+async def serve_protocol():
+    """Serve the protocol page"""
+    protocol_path = "public/protocol.html"
+    if os.path.exists(protocol_path):
+        return FileResponse(protocol_path)
+    else:
+        raise HTTPException(status_code=404, detail="Protocol page not found")
+
+
 @api.get("/health")
 def health():
     return {"ok": True}

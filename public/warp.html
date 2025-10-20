@@ -134,25 +134,6 @@
             border-radius: 0 2px 2px 0;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1001;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-primary);
-            padding: 0.75rem;
-            border-radius: 50%;
-            cursor: pointer;
-            color: var(--text-primary);
-            width: 48px;
-            height: 48px;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.25rem;
-        }
-
         /* Main Content */
         .main-content {
             margin-left: var(--sidebar-width);
@@ -160,136 +141,70 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 3rem 0;
-        }
-
-        .page-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-            background: linear-gradient(135deg, var(--accent), var(--purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-primary);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.2s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .feature-description {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .section-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-primary);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .section-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-primary);
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 2rem;
         }
 
-        .section-title {
-            font-size: 1.5rem;
+        .header-left h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-left p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border: 1px solid var(--border-secondary);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
             font-weight: 600;
-            color: var(--text-primary);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .section-content {
-            padding: 1.5rem;
+        .btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
         }
 
-        .code-block {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-primary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            line-height: 1.6;
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
         }
 
-        .code-block pre {
-            color: var(--text-primary);
-            margin: 0;
+        .btn-primary:hover {
+            background: var(--accent-hover);
         }
 
-        .code-highlight {
-            color: var(--accent);
-        }
-
-        .code-string {
-            color: var(--success);
-        }
-
-        .code-number {
-            color: var(--warning);
-        }
-
-        .code-key {
-            color: var(--purple);
-        }
-
+        /* Tabs */
         .tabs {
             display: flex;
             border-bottom: 1px solid var(--border-primary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             gap: 0.5rem;
         }
 
@@ -322,33 +237,73 @@
             display: block;
         }
 
-        .schema-list {
-            display: grid;
+        /* Filters */
+        .filters {
+            display: flex;
             gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
-        .schema-item {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-primary);
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-secondary);
             border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        /* Package Grid */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .package-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
             padding: 1.5rem;
             transition: all 0.2s;
         }
 
-        .schema-item:hover {
+        .package-card:hover {
             border-color: var(--border-secondary);
             background: var(--bg-tertiary);
+            transform: translateY(-2px);
         }
 
-        .schema-name {
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .package-name {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
             color: var(--text-primary);
             font-family: 'JetBrains Mono', monospace;
         }
 
-        .schema-version {
+        .package-version {
             display: inline-block;
             padding: 0.25rem 0.75rem;
             background: rgba(29, 155, 240, 0.1);
@@ -360,101 +315,124 @@
             margin-left: 0.5rem;
         }
 
-        .schema-description {
+        .package-schema {
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.75rem;
         }
 
-        .schema-fields {
+        .package-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .quality-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .quality-a { background: rgba(0, 186, 124, 0.1); color: var(--success); border: 1px solid var(--success); }
+        .quality-b { background: rgba(29, 155, 240, 0.1); color: var(--accent); border: 1px solid var(--accent); }
+        .quality-c { background: rgba(255, 183, 0, 0.1); color: var(--warning); border: 1px solid var(--warning); }
+
+        .package-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .package-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .field-tag {
+        .tag {
             padding: 0.35rem 0.75rem;
-            background: var(--bg-tertiary);
+            background: var(--bg-primary);
             border: 1px solid var(--border-secondary);
             border-radius: 12px;
             font-size: 0.75rem;
             color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
         }
 
-        .field-tag.required {
-            border-color: var(--warning);
-            color: var(--warning);
+        .package-actions {
+            display: flex;
+            gap: 0.75rem;
         }
 
-        .pipeline-steps {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .pipeline-step {
+        .package-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-secondary);
             background: var(--bg-primary);
-            border: 1px solid var(--border-primary);
-            border-left: 4px solid var(--accent);
-            border-radius: 12px;
-            padding: 1.5rem;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
+        .package-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .package-btn.primary {
             background: var(--accent);
+            border-color: var(--accent);
             color: white;
-            border-radius: 50%;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-right: 1rem;
         }
 
-        .step-title {
-            font-size: 1.1rem;
-            font-weight: 600;
+        .package-btn.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border-secondary);
+            border-radius: 16px;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
             margin-bottom: 0.5rem;
             color: var(--text-primary);
         }
 
-        .step-description {
+        .empty-state p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .btn {
-            padding: 0.875rem 1.5rem;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 24px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.2s;
-        }
-
-        .btn:hover {
-            background: var(--accent-hover);
-        }
-
-        .btn-secondary {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-secondary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-hover);
-        }
-
-        .stats-grid {
+        /* Stats Bar */
+        .stats-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
@@ -462,11 +440,10 @@
         }
 
         .stat-card {
-            background: var(--bg-primary);
+            background: var(--bg-secondary);
             border: 1px solid var(--border-primary);
             border-radius: 12px;
             padding: 1.5rem;
-            text-align: center;
         }
 
         .stat-value {
@@ -481,60 +458,136 @@
             color: var(--text-secondary);
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 2rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
             }
 
             .main-content {
                 margin-left: 0;
             }
 
-            .mobile-menu-btn {
-                display: flex;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .feature-grid {
+            .packages-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-secondary);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-tertiary);
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
-
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar">
         <div class="sidebar-logo">
             <a href="/" class="logo">
                 <span>⚡</span>
@@ -580,291 +633,313 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content" id="main-content">
+    <div class="main-content">
         <div class="container">
-            <div class="page-header">
-                <h1 class="page-title">Warp</h1>
-                <p class="page-subtitle">Transform any data source into validated, canonical records with deterministic schema standardization</p>
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>Warp Package Manager</h1>
+                    <p>Transform, validate, and package data into schema-ready formats</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn" onclick="openIngestModal()">
+                        <span>📥</span> Ingest Data
+                    </button>
+                    <button class="btn btn-primary" onclick="openCreateModal()">
+                        <span>+</span> Create Package
+                    </button>
+                </div>
             </div>
 
             <!-- Stats -->
-            <div class="stats-grid">
+            <div class="stats-bar">
                 <div class="stat-card">
-                    <div class="stat-value">v0.1.0</div>
-                    <div class="stat-label">WarpSpec Version</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">7</div>
-                    <div class="stat-label">Validation Layers</div>
+                    <div class="stat-value" id="package-count">12</div>
+                    <div class="stat-label">Active Packages</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">100%</div>
-                    <div class="stat-label">Schema Coverage</div>
+                    <div class="stat-value" id="schema-count">7</div>
+                    <div class="stat-label">Schema Presets</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">ISO</div>
-                    <div class="stat-label">Standard Compliant</div>
+                    <div class="stat-value" id="pipeline-count">24</div>
+                    <div class="stat-label">Running Pipelines</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="quality-avg">A-</div>
+                    <div class="stat-label">Avg Quality Score</div>
                 </div>
             </div>
 
-            <!-- Features -->
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📦</div>
-                    <h3 class="feature-title">Universal Envelope</h3>
-                    <p class="feature-description">Every record shares the same top-level structure, separating provenance, extraction, mapping, validation, and payload.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✓</div>
-                    <h3 class="feature-title">Deterministic Validation</h3>
-                    <p class="feature-description">JSON Schema 2020-12 plus rule engine for semantic checks ensures data quality and consistency.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
-                    <h3 class="feature-title">Content-Addressed</h3>
-                    <p class="feature-description">SHA-256 hashes, HTTP metadata, snapshots, and transformation lineage for complete auditability.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌍</div>
-                    <h3 class="feature-title">Normalized Standards</h3>
-                    <p class="feature-description">ISO-8601 timestamps, ISO-4217 currency, SI units, and ISO-3166 country codes throughout.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3 class="feature-title">Versioned Schemas</h3>
-                    <p class="feature-description">Independent versioning for envelope and domain payloads with semantic versioning.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <h3 class="feature-title">Human Readable</h3>
-                    <p class="feature-description">Snake_case keys, lightweight nesting, canonical field order, and clear examples.</p>
-                </div>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('packages')">Packages</button>
+                <button class="tab" onclick="switchTab('pipelines')">Pipelines</button>
+                <button class="tab" onclick="switchTab('schemas')">Schema Registry</button>
+                <button class="tab" onclick="switchTab('rules')">Mapping Rules</button>
             </div>
 
-            <!-- Pipeline -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h2 class="section-title">Warp Pipeline</h2>
-                </div>
-                <div class="section-content">
-                    <div class="pipeline-steps">
-                        <div class="pipeline-step">
-                            <span class="step-number">1</span>
-                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
-                                <div class="step-title">Capture</div>
-                                <div class="step-description">Fetch data, store snapshot blob, compute content hash (SHA-256)</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-step">
-                            <span class="step-number">2</span>
-                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
-                                <div class="step-title">Extract</div>
-                                <div class="step-description">Apply rules/CSS/XPath/LLM hybrid to produce loose dictionary</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-step">
-                            <span class="step-number">3</span>
-                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
-                                <div class="step-title">Normalize</div>
-                                <div class="step-description">Convert currency, units, locale, whitespace, and number coercions</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-step">
-                            <span class="step-number">4</span>
-                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
-                                <div class="step-title">Map</div>
-                                <div class="step-description">Assign domain schema and perform field mapping transformations</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-step">
-                            <span class="step-number">5</span>
-                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
-                                <div class="step-title">Validate</div>
-                                <div class="step-description">JSON Schema + semantic rule engine validation with detailed results</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-step">
-                            <span class="step-number">6</span>
-                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
-                                <div class="step-title">Dedupe</div>
-                                <div class="step-description">Fingerprinting and clustering across envelope + payload data</div>
-                            </div>
-                        </div>
-                        <div class="pipeline-step">
-                            <span class="step-number">7</span>
-                            <div style="display: inline-block; vertical-align: top; width: calc(100% - 48px);">
-                                <div class="step-title">Persist</div>
-                                <div class="step-description">Write to object store and index metadata to database</div>
-                            </div>
-                        </div>
+            <!-- Packages Tab -->
+            <div class="tab-content active" id="packages-tab">
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Domain</label>
+                        <select class="filter-select" id="domain-filter">
+                            <option value="">All Domains</option>
+                            <option value="products">Products</option>
+                            <option value="listings">Listings</option>
+                            <option value="news">News</option>
+                            <option value="research">Research</option>
+                            <option value="financial">Financial</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Update Cadence</label>
+                        <select class="filter-select" id="cadence-filter">
+                            <option value="">All</option>
+                            <option value="realtime">Real-time</option>
+                            <option value="hourly">Hourly</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="static">Static</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Quality</label>
+                        <select class="filter-select" id="quality-filter">
+                            <option value="">All Grades</option>
+                            <option value="A">A Grade</option>
+                            <option value="B">B Grade</option>
+                            <option value="C">C Grade</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Access</label>
+                        <select class="filter-select" id="access-filter">
+                            <option value="">All</option>
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                            <option value="published">Published to Exchange</option>
+                        </select>
                     </div>
                 </div>
-            </div>
 
-            <!-- Schemas -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h2 class="section-title">Domain Schemas</h2>
-                </div>
-                <div class="section-content">
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchTab('product')">Product</button>
-                        <button class="tab" onclick="switchTab('job')">Job Posting</button>
-                        <button class="tab" onclick="switchTab('article')">Article</button>
-                    </div>
-
-                    <div class="tab-content active" id="product-tab">
-                        <div class="schema-item">
-                            <div class="schema-name">
-                                schema/product
-                                <span class="schema-version">@1.1.0</span>
-                            </div>
-                            <div class="schema-description">E-commerce product listings with pricing, availability, and specifications</div>
-                            <div class="schema-fields">
-                                <span class="field-tag required">name*</span>
-                                <span class="field-tag">sku</span>
-                                <span class="field-tag">brand</span>
-                                <span class="field-tag">price</span>
-                                <span class="field-tag">availability</span>
-                                <span class="field-tag">dimensions</span>
-                                <span class="field-tag">images</span>
-                                <span class="field-tag">specs</span>
+                <!-- Packages Grid -->
+                <div class="packages-grid" id="packages-grid">
+                    <!-- Example Package Cards -->
+                    <div class="package-card">
+                        <div class="package-header">
+                            <div>
+                                <div class="package-name">
+                                    products.global
+                                    <span class="package-version">v1.3.0</span>
+                                </div>
+                                <div class="package-schema">schema: Product.v1</div>
                             </div>
                         </div>
-                        <div class="code-block">
-<pre>{
-  <span class="code-key">"name"</span>: <span class="code-string">"Solar Panel Kit 300W"</span>,
-  <span class="code-key">"sku"</span>: <span class="code-string">"SPK-300"</span>,
-  <span class="code-key">"brand"</span>: <span class="code-string">"Helio"</span>,
-  <span class="code-key">"price"</span>: {
-    <span class="code-key">"amount"</span>: <span class="code-number">249.99</span>,
-    <span class="code-key">"currency"</span>: <span class="code-string">"USD"</span>
-  },
-  <span class="code-key">"availability"</span>: <span class="code-string">"in_stock"</span>,
-  <span class="code-key">"images"</span>: [<span class="code-string">"https://cdn.example.com/solar.jpg"</span>],
-  <span class="code-key">"specs"</span>: {
-    <span class="code-key">"cells"</span>: <span class="code-string">"Monocrystalline"</span>,
-    <span class="code-key">"efficiency"</span>: <span class="code-number">0.21</span>
-  }
-}</pre>
+                        <div class="package-meta">
+                            <span class="meta-item">📦 12.4k rows</span>
+                            <span class="meta-item">🔄 Daily</span>
+                            <span class="quality-badge quality-a">A-</span>
+                        </div>
+                        <div class="package-description">
+                            Global product catalog with pricing, availability, and images. Normalized currency and deduped by source URL.
+                        </div>
+                        <div class="package-tags">
+                            <span class="tag">ecommerce</span>
+                            <span class="tag">products</span>
+                            <span class="tag">pricing</span>
+                        </div>
+                        <div class="package-actions">
+                            <button class="package-btn primary" onclick="openPackage('products.global')">Open</button>
+                            <button class="package-btn" onclick="installPackage('products.global')">Install</button>
+                            <button class="package-btn" onclick="validatePackage('products.global')">Validate</button>
                         </div>
                     </div>
 
-                    <div class="tab-content" id="job-tab">
-                        <div class="schema-item">
-                            <div class="schema-name">
-                                schema/job
-                                <span class="schema-version">@1.0.0</span>
-                            </div>
-                            <div class="schema-description">Job postings with location, salary range, and requirements</div>
-                            <div class="schema-fields">
-                                <span class="field-tag required">title*</span>
-                                <span class="field-tag required">company*</span>
-                                <span class="field-tag">location_text</span>
-                                <span class="field-tag">remote</span>
-                                <span class="field-tag">salary_range</span>
-                                <span class="field-tag">posted_at</span>
-                                <span class="field-tag">description</span>
+                    <div class="package-card">
+                        <div class="package-header">
+                            <div>
+                                <div class="package-name">
+                                    jobs.tech
+                                    <span class="package-version">v2.1.5</span>
+                                </div>
+                                <div class="package-schema">schema: JobPosting.v2</div>
                             </div>
                         </div>
-                        <div class="code-block">
-<pre>{
-  <span class="code-key">"title"</span>: <span class="code-string">"Data Engineer"</span>,
-  <span class="code-key">"company"</span>: <span class="code-string">"OpenAI"</span>,
-  <span class="code-key">"location_text"</span>: <span class="code-string">"Remote (US)"</span>,
-  <span class="code-key">"remote"</span>: <span class="code-highlight">true</span>,
-  <span class="code-key">"salary_range"</span>: {
-    <span class="code-key">"min"</span>: { <span class="code-key">"amount"</span>: <span class="code-number">150000</span>, <span class="code-key">"currency"</span>: <span class="code-string">"USD"</span> },
-    <span class="code-key">"max"</span>: { <span class="code-key">"amount"</span>: <span class="code-number">220000</span>, <span class="code-key">"currency"</span>: <span class="code-string">"USD"</span> }
-  },
-  <span class="code-key">"posted_at"</span>: <span class="code-string">"2025-10-18T00:00:00Z"</span>
-}</pre>
+                        <div class="package-meta">
+                            <span class="meta-item">📦 8.2k rows</span>
+                            <span class="meta-item">🔄 Hourly</span>
+                            <span class="quality-badge quality-a">A+</span>
+                        </div>
+                        <div class="package-description">
+                            Tech job postings with salary ranges, remote status, and company info. Real-time updates from 50+ sources.
+                        </div>
+                        <div class="package-tags">
+                            <span class="tag">jobs</span>
+                            <span class="tag">tech</span>
+                            <span class="tag">realtime</span>
+                        </div>
+                        <div class="package-actions">
+                            <button class="package-btn primary" onclick="openPackage('jobs.tech')">Open</button>
+                            <button class="package-btn" onclick="installPackage('jobs.tech')">Install</button>
+                            <button class="package-btn" onclick="validatePackage('jobs.tech')">Validate</button>
                         </div>
                     </div>
 
-                    <div class="tab-content" id="article-tab">
-                        <div class="schema-item">
-                            <div class="schema-name">
-                                schema/article
-                                <span class="schema-version">@1.0.0</span>
-                            </div>
-                            <div class="schema-description">News articles and blog posts with authorship and content hashing</div>
-                            <div class="schema-fields">
-                                <span class="field-tag required">title*</span>
-                                <span class="field-tag">authors</span>
-                                <span class="field-tag">published_at</span>
-                                <span class="field-tag">summary</span>
-                                <span class="field-tag">body_text_hash</span>
+                    <div class="package-card">
+                        <div class="package-header">
+                            <div>
+                                <div class="package-name">
+                                    news.ai
+                                    <span class="package-version">v1.0.2</span>
+                                </div>
+                                <div class="package-schema">schema: Article.v1</div>
                             </div>
                         </div>
-                        <div class="code-block">
-<pre>{
-  <span class="code-key">"title"</span>: <span class="code-string">"AI Research Breakthrough"</span>,
-  <span class="code-key">"authors"</span>: [<span class="code-string">"Dr. Jane Smith"</span>, <span class="code-string">"Prof. John Doe"</span>],
-  <span class="code-key">"published_at"</span>: <span class="code-string">"2025-10-18T10:30:00Z"</span>,
-  <span class="code-key">"summary"</span>: <span class="code-string">"Research team achieves new milestone..."</span>,
-  <span class="code-key">"body_text_hash"</span>: <span class="code-string">"sha256:abc123..."</span>
-}</pre>
+                        <div class="package-meta">
+                            <span class="meta-item">📦 3.1k rows</span>
+                            <span class="meta-item">🔄 Real-time</span>
+                            <span class="quality-badge quality-b">B+</span>
+                        </div>
+                        <div class="package-description">
+                            AI and ML news articles with sentiment analysis and topic classification. Streaming updates.
+                        </div>
+                        <div class="package-tags">
+                            <span class="tag">news</span>
+                            <span class="tag">AI</span>
+                            <span class="tag">streaming</span>
+                        </div>
+                        <div class="package-actions">
+                            <button class="package-btn primary" onclick="openPackage('news.ai')">Open</button>
+                            <button class="package-btn" onclick="installPackage('news.ai')">Install</button>
+                            <button class="package-btn" onclick="validatePackage('news.ai')">Validate</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Example Envelope -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h2 class="section-title">Universal Envelope Structure</h2>
-                </div>
-                <div class="section-content">
-                    <div class="code-block">
-<pre>{
-  <span class="code-key">"warp_version"</span>: <span class="code-string">"0.1.0"</span>,
-  <span class="code-key">"id"</span>: <span class="code-string">"urn:uuid:2a5c9a2e-2e8c-4a41-9b9a-2d3d5f9e43ab"</span>,
-  <span class="code-key">"source"</span>: {
-    <span class="code-key">"url"</span>: <span class="code-string">"https://example.com/data"</span>,
-    <span class="code-key">"domain"</span>: <span class="code-string">"example.com"</span>,
-    <span class="code-key">"fetched_at"</span>: <span class="code-string">"2025-10-18T14:03:11Z"</span>,
-    <span class="code-key">"content"</span>: {
-      <span class="code-key">"hash"</span>: <span class="code-string">"sha256:abc..."</span>,
-      <span class="code-key">"bytes"</span>: <span class="code-number">48211</span>
-    }
-  },
-  <span class="code-key">"extraction"</span>: {
-    <span class="code-key">"strategy"</span>: <span class="code-string">"hybrid"</span>,
-    <span class="code-key">"spec_id"</span>: <span class="code-string">"supplier/acme@3.0.0"</span>
-  },
-  <span class="code-key">"mapping"</span>: {
-    <span class="code-key">"schema_id"</span>: <span class="code-string">"schema/product@1.1.0"</span>,
-    <span class="code-key">"currency_policy"</span>: <span class="code-string">"ISO-4217"</span>
-  },
-  <span class="code-key">"validation"</span>: {
-    <span class="code-key">"summary"</span>: { <span class="code-key">"errors"</span>: <span class="code-number">0</span>, <span class="code-key">"warnings"</span>: <span class="code-number">1</span> }
-  },
-  <span class="code-key">"payload"</span>: {
-    <span class="code-key">"schema_id"</span>: <span class="code-string">"schema/product@1.1.0"</span>,
-    <span class="code-key">"data"</span>: { <span class="code-highlight">/* domain-specific fields */</span> }
-  }
-}</pre>
-                    </div>
+            <!-- Pipelines Tab -->
+            <div class="tab-content" id="pipelines-tab">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔄</div>
+                    <h3>Pipeline Management</h3>
+                    <p>View and manage your data ingestion pipelines, transformation runs, and scheduling.</p>
+                    <button class="btn btn-primary">View Pipelines</button>
                 </div>
             </div>
 
-            <!-- CTA -->
-            <div style="text-align: center; margin: 3rem 0;">
-                <a href="/catalog.html" class="btn">Browse Data Packages</a>
-                <a href="/upload.html" class="btn btn-secondary" style="margin-left: 1rem;">Upload Data</a>
+            <!-- Schema Registry Tab -->
+            <div class="tab-content" id="schemas-tab">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <h3>Schema Registry</h3>
+                    <p>Browse preset schemas, create custom schemas, and manage field mappings for your data packages.</p>
+                    <button class="btn btn-primary">Browse Schemas</button>
+                </div>
+            </div>
+
+            <!-- Mapping Rules Tab -->
+            <div class="tab-content" id="rules-tab">
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚙️</div>
+                    <h3>Mapping Rules</h3>
+                    <p>Define transformation rules, PII policies, deduplication logic, and enrichment steps.</p>
+                    <button class="btn btn-primary">Create Rule</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle('show');
-            }
-        }
+    <!-- Create Package Modal -->
+    <div id="create-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Package</h3>
+                <button class="modal-close" onclick="closeCreateModal()">&times;</button>
+            </div>
+            <form id="create-form">
+                <div class="form-group">
+                    <label class="form-label">Package Name</label>
+                    <input type="text" class="form-input" placeholder="e.g., products.global" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Schema Preset</label>
+                    <select class="form-select" required>
+                        <option value="">Select schema...</option>
+                        <option value="product">Product.v1</option>
+                        <option value="job">JobPosting.v2</option>
+                        <option value="article">Article.v1</option>
+                        <option value="listing">Listing.v1</option>
+                        <option value="custom">Custom Schema</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" placeholder="Describe your data package..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Update Cadence</label>
+                    <select class="form-select">
+                        <option value="realtime">Real-time</option>
+                        <option value="hourly">Hourly</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="static">Static</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn" onclick="closeCreateModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Create Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <!-- Ingest Data Modal -->
+    <div id="ingest-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Ingest Data</h3>
+                <button class="modal-close" onclick="closeIngestModal()">&times;</button>
+            </div>
+            <form id="ingest-form">
+                <div class="form-group">
+                    <label class="form-label">Target Package</label>
+                    <select class="form-select" required>
+                        <option value="">Select package...</option>
+                        <option value="products.global">products.global</option>
+                        <option value="jobs.tech">jobs.tech</option>
+                        <option value="news.ai">news.ai</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Source Type</label>
+                    <select class="form-select" id="source-type">
+                        <option value="file">File Upload</option>
+                        <option value="url">HTTP/API</option>
+                        <option value="scrape">Web Scraper</option>
+                        <option value="database">Database</option>
+                        <option value="stream">Streaming</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Data Source</label>
+                    <input type="text" class="form-input" placeholder="URL, file path, or connection string">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn" onclick="closeIngestModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Start Ingestion</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8100';
+
+        // Tab switching
         function switchTab(tabName) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -873,12 +948,60 @@
             document.getElementById(`${tabName}-tab`).classList.add('active');
         }
 
-        window.addEventListener('resize', () => {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('show');
-            }
+        // Modal functions
+        function openCreateModal() {
+            document.getElementById('create-modal').classList.add('show');
+        }
+
+        function closeCreateModal() {
+            document.getElementById('create-modal').classList.remove('show');
+        }
+
+        function openIngestModal() {
+            document.getElementById('ingest-modal').classList.add('show');
+        }
+
+        function closeIngestModal() {
+            document.getElementById('ingest-modal').classList.remove('show');
+        }
+
+        // Package actions
+        function openPackage(packageName) {
+            alert(`Opening package: ${packageName}\n\nShowing:\n• Schema definition\n• Sample data\n• API snippets\n• Quality reports\n• Lineage graph`);
+        }
+
+        function installPackage(packageName) {
+            alert(`Installing ${packageName}...\n\nThis will:\n• Bind to your project\n• Generate API credentials\n• Setup access policies\n• Provide SDK integration code`);
+        }
+
+        function validatePackage(packageName) {
+            alert(`Running validation on ${packageName}...\n\nChecking:\n• Schema compliance\n• Data quality\n• PII detection\n• Drift analysis\n• Integrity checks`);
+        }
+
+        // Form submissions
+        document.getElementById('create-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Package created! Redirecting to package configuration...');
+            closeCreateModal();
         });
+
+        document.getElementById('ingest-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Ingestion started! Check Pipelines tab for status...');
+            closeIngestModal();
+        });
+
+        // Close modals on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // Initialize
+        console.log('Warp Package Manager initialized');
     </script>
 </body>
 </html>
